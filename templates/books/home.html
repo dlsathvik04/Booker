@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booker-Home</title>
+
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+</head>
+
+<body>
+    {% include "widgets/navigation.html" with active="Home" only %}
+    <div class="container p-4">
+        {% include "widgets/carousel.html" %}
+
+        <div class="h3">Recommended For You..</div>
+        {% include "widgets/horizontal_collection.html" %}
+
+        <div class="h3">Trending Now..</div>
+        {% include "widgets/vertical_collection.html" %}
+    </div>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+
+</html>

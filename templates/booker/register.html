@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <title>Booker-Register</title>
+    <style>
+        .hero-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar bg-body-tertiary fixed-top mb-5">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="{% static 'images/logo1.png' %}" alt="Logo" width="30" height="30"
+                    class="d-inline-block align-text-middle">
+                Booker
+            </a>
+            <span class="navbar-text">
+                <a href="/login" class="btn btn-secondary text-white" tabindex="-1" role="button"
+                    aria-disabled="true">Login</a>
+                <a href="/register" class="btn btn-secondary text-white" tabindex="-1" role="button"
+                    aria-disabled="true">Register</a>
+            </span>
+        </div>
+    </nav>
+    <div class="hero-section">
+        <div class="container col-lg-3 mx-auto p-4 border rounded-4 bg-body-tertiary">
+            <div class="logo mb-3">
+                <div class="col-md-12 text-center">
+                    <h2>Register</h2>
+                </div>
+            </div>
+            <form method="POST" action="/register/" onsubmit="return validatePassword()">
+
+                {% csrf_token %}
+
+                <div class="form-group mb-3">
+                    <label for="first_name">First Name</label>
+                    <input type="text" class="form-control mt-1" id="first_name" name="first_name"
+                        placeholder="First Name" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" class="form-control mt-1" id="last_name" name="last_name" placeholder="Last Name"
+                        required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control mt-1" id="username" name="username"
+                        placeholder="Enter username" required>
+                    <small id="username_warning" class="text-warning">Can't be changed later.</small>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="email">Email address</label>
+                    <input name="email" type="email" class="form-control mt-1" id="email" aria-describedby="emailHelp"
+                        placeholder="Enter email" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="password">Password</label>
+                    <input name="password" type="password" class="form-control mt-1" id="password"
+                        placeholder="Password" required>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="confirm_password">Confirm Password</label>
+                    <input type="password" class="form-control mt-1" id="confirm_password"
+                        placeholder="Confirm Password" required>
+                    <small id="passwordError" class="text-danger" style="display:none;">Passwords do not match</small>
+                </div>
+
+                <div class="container-fluid text-center">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <script>
+        function validatePassword() {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm_password").value;
+            const passwordError = document.getElementById("passwordError");
+
+            if (password !== confirmPassword) {
+                passwordError.style.display = "block";
+                return false; // Prevent form submission
+            } else {
+                passwordError.style.display = "none";
+                return true; // Allow form submission
+            }
+        }
+    </script>
+</body>
+
+</html>
