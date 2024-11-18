@@ -46,7 +46,7 @@
     {% include "widgets/navigation.html" with active="Home" only %}
 
     <div class="container my-5">
-        <!-- Book Info Section -->
+        <!-- book info component start -->
         <div class="row mb-4 align-items-start">
             <div class="col-lg-2 col-md-3 col-12 text-center mb-3 mb-md-0">
                 <img src="{% static 'images/book_covers/the_name_of_the_wind.png' %}" alt="Book Cover"
@@ -61,10 +61,11 @@
                 </p>
             </div>
         </div>
+        <!-- book info component end -->
 
-        <!-- Ratings Section -->
+
         <div class="row my-4 rounded">
-            <!-- Ratings Widget -->
+            <!-- ratings component start -->
             <div class="col-md-5 text-center d-flex flex-column align-items-center justify-content-around py-4">
                 <div class="rating-widget mb-2 shadow">
                     <div>
@@ -78,13 +79,13 @@
                     <p>Clarity: <strong>3.8 / 5</strong></p>
                 </div>
             </div>
+            <!-- ratings component end -->
 
-            <!-- Ratings Form -->
+            <!-- ratings form start -->
             <div class="col-md-7 p-4">
                 <h3>Submit Your Rating and Review</h3>
                 <form method="POST" action="#">
                     {% csrf_token %}
-                    <!-- Overall Rating -->
                     <div class="mb-3">
                         <label for="rating-overall" class="form-label">
                             Rating: <span id="ratingOverallDisplay">0</span>
@@ -94,7 +95,6 @@
                             oninput="document.getElementById('ratingOverallDisplay').innerText = this.value;">
                     </div>
 
-                    <!-- Specific Ratings -->
                     <div class="mb-3">
                         <label for="rating-language" class="form-label">
                             Language Rating: <span id="ratingLanguageDisplay">0</span>
@@ -122,8 +122,6 @@
                             oninput="document.getElementById('ratingClarityDisplay').innerText = this.value;">
 
                     </div>
-
-                    <!-- Review Text -->
                     <div class="mb-3">
                         <label for="review" class="form-label">Review</label>
                         <textarea id="review" name="review" class="form-control" rows="2"
@@ -132,11 +130,12 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
             </div>
+            <!-- ratings form end -->
         </div>
 
 
 
-        <!-- Reviews Section -->
+        <!-- reviews collection component start-->
         <div class="mb-5">
             <h3>Reviews</h3>
             <div class="list-group">
@@ -166,6 +165,7 @@
                 </div>
             </div>
         </div>
+        <!-- reviews collection component emd-->
 
         <div class="mb-5">
             <h3>Similar Books</h3>
