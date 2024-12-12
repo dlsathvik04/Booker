@@ -1,0 +1,21 @@
+<!-- ratings component start -->
+<div class="col-md-5 text-center d-flex flex-column align-items-center justify-content-around py-4">
+    <div class="rating-widget mb-2 shadow" style="background: conic-gradient(
+        #ffc107 calc({{ book.average_rating|default:0 }} / 5 * 360deg),
+        #e9ecef calc({{ book.average_rating|default:0 }} / 5 * 360deg)
+    );">
+        <div>
+            <strong style="font-size: 3em;">
+                {{ book.average_rating|default:0 }}
+            </strong>
+            <span style="font-size: 1.5em;">/ 5</span>
+        </div>
+    </div>
+    <div style="font-size: 1.2em;">
+        <p>Language: <strong>{{ book.average_language_rating|default:0 }} / 5</strong></p>
+        <p>Children Friendly: <strong>{{ book.average_children_friendly_rating|default:0 }} / 5</strong></p>
+        <p>Clarity: <strong>{{ book.average_clarity_rating|default:0 }} / 5</strong></p>
+    </div>
+</div>
+
+<!-- ratings component end -->

@@ -1,31 +1,29 @@
 {% load static %}
 <!-- vertical book collection component start -->
 <div class="row g-3">
-    {% for i in '0123' %}
+    {% for book in books %}
     <div class="col-12 col-lg-6">
         <div class="card m-2">
             <div class="row g-0">
                 <div class="col-12 col-md-3">
-                    <img src="{% static 'images/book_covers/the_name_of_the_wind.png' %}"
-                        class="img-fluid rounded-start w-100" alt="...">
+                    <img src="{{ book.cover_image.url }}"
+                        class="img-fluid rounded-start w-100" alt="{{ book.title }}">
                 </div>
 
                 <div class="col-12 col-md-9">
                     <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <p class="card-text">{{ book.description|truncatewords:25 }}</p>
                         <p class="card-text">
-                            This is a wider card with supporting text below as a natural lead-in to additional content.
-                            This content is a little bit longer.
-                        </p>
-                        <p class="card-text">
-                            <small class="text-body-secondary">Last updated 3 mins ago</small>
+                            <small class="text-body-secondary">Author: {{ book.author }}</small>
                         </p>
 
                         <div class="btn-group w-100 d-flex flex-wrap" role="group"
                             aria-label="Basic checkbox toggle button group">
-                            <a type="button" class="btn btn-outline-secondary flex-fill" id="button-share"  href="/home/details/">Details</a>
-                            <input type="checkbox" class="btn-check" id="save{{ i }}" autocomplete="off">
-                            <label class="btn btn-outline-secondary flex-fill" for="save{{ i }}">Save</label>
+                            <a type="button" class="btn btn-outline-secondary flex-fill" id="button-share" href="/home/details/{{ book.id }}">Details</a>
+                            {% csrf_token %}
+                            <input type="checkbox" class="btn-check save-book" id="vertical-save{{ book.id }}" autocomplete="off"{% if book.is_saved %} checked {% endif %}>
+                            <label class="btn btn-outline-secondary flex-fill" for="vertical-save{{ book.id }}">Save</label>
                         </div>
                     </div>
                 </div>
@@ -34,4 +32,6 @@
     </div>
     {% endfor %}
 </div>
+
+
 <!-- vertical book collection component end -->

@@ -8,13 +8,52 @@
     <title>Trending</title>
 
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('input[type="checkbox"].save-book').forEach(function (checkbox) {
+                checkbox.addEventListener('change', function () {
+                    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                    let bookId = this.id.replace('horizontal-save', ''); 
+                    bookId = bookId.replace('vertical-save', ''); // Get the book id from the checkbox ID
+                    const isChecked = this.checked;  // Whether the checkbox is checked or not
+    
+                    console.log(bookId, isChecked);
+    
+                    // Send an AJAX request to add/remove the book from the wishlist
+                    fetch("{% url 'toggle_wishlist' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-CSRFToken': csrftoken
+                        },
+                        body: `book_id=${bookId}&action=${isChecked ? 'add' : 'remove'}`
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok ' + response.statusText);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log(data);
+                            location.reload();
+                            // Optionally, handle the response, like updating the UI with a success message
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Something went wrong. Please try again.');
+                        });
+                });
+            });
+        });
+    </script>
 </head>
 
 <body>
     {% include "widgets/navigation.html" with active="Trending" only %}
     <div class="container p-4">
         <h3>Trending Now</h3>
-        {% include "widgets/vertical_collection.html" %}
+        {% include "widgets/vertical_collection.html" with books=trending_books %}
     </div>
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 </body>

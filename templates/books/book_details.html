@@ -13,8 +13,6 @@
             width: 8em;
             height: 8em;
             border-radius: 50%;
-            background: conic-gradient(#ffc107 calc(4 / 5 * 360deg),
-                    #e9ecef calc(4 / 5 * 360deg));
             display: flex;
             justify-content: center;
             align-items: center;
@@ -43,129 +41,20 @@
 </head>
 
 <body>
-    {% include "widgets/navigation.html" with active="Home" only %}
+    {% include "widgets/navigation.html" with active="" only %}
 
     <div class="container my-5">
-        <!-- book info component start -->
-        <div class="row mb-4 align-items-start">
-            <div class="col-lg-2 col-md-3 col-12 text-center mb-3 mb-md-0">
-                <img src="{% static 'images/book_covers/the_name_of_the_wind.png' %}" alt="Book Cover"
-                    class="img-fluid rounded shadow">
-            </div>
-            <div class="col-lg-8 col-md-7 col-12 text-center text-md-start">
-                <h1 class="fw-bold">Book Title</h1>
-                <h4 class="text-muted">by Author Name</h4>
-                <p class="mt-3">
-                    This is a short description of the book. It provides an overview of the book's content and key
-                    themes to intrigue readers.
-                </p>
-            </div>
-        </div>
-        <!-- book info component end -->
+        {% include "widgets/book_info.html" with book=book %}
 
 
         <div class="row my-4 rounded">
-            <!-- ratings component start -->
-            <div class="col-md-5 text-center d-flex flex-column align-items-center justify-content-around py-4">
-                <div class="rating-widget mb-2 shadow">
-                    <div>
-                        <strong style="font-size: 3em;">4.0</strong>
-                        <span style="font-size: 1.5em;">/ 5</span>
-                    </div>
-                </div>
-                <div style="font-size: 1.2em;">
-                    <p>Language: <strong>4.5 / 5</strong></p>
-                    <p>Children Friendly: <strong>4.0 / 5</strong></p>
-                    <p>Clarity: <strong>3.8 / 5</strong></p>
-                </div>
-            </div>
-            <!-- ratings component end -->
+            {% include "widgets/ratings.html" with book=book %}
 
-            <!-- ratings form start -->
-            <div class="col-md-7 p-4">
-                <h3>Submit Your Rating and Review</h3>
-                <form method="POST" action="#">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="rating-overall" class="form-label">
-                            Rating: <span id="ratingOverallDisplay">0</span>
-                        </label>
-                        <input type="range" id="rating-overall" name="rating_overall" class="form-range" min="0" max="5"
-                            step="0.1" value="0"
-                            oninput="document.getElementById('ratingOverallDisplay').innerText = this.value;">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="rating-language" class="form-label">
-                            Language Rating: <span id="ratingLanguageDisplay">0</span>
-                        </label>
-                        <input type="range" id="rating-language" name="rating_language" class="form-range" min="0"
-                            max="5" step="0.1" value="0"
-                            oninput="document.getElementById('ratingLanguageDisplay').innerText = this.value;">
-
-                    </div>
-                    <div class="mb-3">
-                        <label for="rating-children-friendly" class="form-label">
-                            Children Friendly Rating: <span id="ratingChildrenFriendlyDisplay">0</span>
-                        </label>
-                        <input type="range" id="rating-children-friendly" name="rating_children_friendly"
-                            class="form-range" min="0" max="5" step="0.1" value="0"
-                            oninput="document.getElementById('ratingChildrenFriendlyDisplay').innerText = this.value;">
-
-                    </div>
-                    <div class="mb-3">
-                        <label for="rating-clarity" class="form-label">
-                            Clarity Rating: <span id="ratingClarityDisplay">0</span>
-                        </label>
-                        <input type="range" id="rating-clarity" name="rating_clarity" class="form-range" min="0" max="5"
-                            step="0.1" value="0"
-                            oninput="document.getElementById('ratingClarityDisplay').innerText = this.value;">
-
-                    </div>
-                    <div class="mb-3">
-                        <label for="review" class="form-label">Review</label>
-                        <textarea id="review" name="review" class="form-control" rows="2"
-                            placeholder="Write your review here" required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
-            <!-- ratings form end -->
+            {% include "widgets/ratings_form.html" with review=user_review %}
         </div>
 
 
-
-        <!-- reviews collection component start-->
-        <div class="mb-5">
-            <h3>Reviews</h3>
-            <div class="list-group">
-                <div class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">User123</div>
-                        This is a comment about the book.
-                    </div>
-                    <div>
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-outline-success">Upvote</button>
-                            <button type="button" class="btn btn-outline-danger">Downvote</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item d-flex justify-content-between align-items-start">
-                    <div class="ms-2 me-auto">
-                        <div class="fw-bold">JaneDoe</div>
-                        Another insightful comment.
-                    </div>
-                    <div>
-                        <div class="btn-group" role="group">
-                            <button type="button" class="btn btn-outline-success">Upvote</button>
-                            <button type="button" class="btn btn-outline-danger">Downvote</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- reviews collection component emd-->
+        {% include "widgets/reviews.html" with ratings=ratings user_reactions=user_reactions %}
 
         <div class="mb-5">
             <h3>Similar Books</h3>

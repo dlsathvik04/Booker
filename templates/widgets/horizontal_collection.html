@@ -1,23 +1,27 @@
 {% load static %}
+{% load custom_filters %}
 <!-- horizontal collection component start -->
 <!-- should take a list of Book objects and render therm in horizontal scrollable list -->
- 
+
 <div class="d-flex flex-row flex-nowrap overflow-auto p-1 mb-3">
-    {% for i in '0123456789'%}
+    {% for book in books %}
     <div class="card m-1 mx-3 mb-2" style="min-width: 100px; flex: 0 0 auto;">
-        <img src="{% static 'images/book_covers/the_name_of_the_wind.png' %}" 
-        class="card-img-top p-1" 
-        style="height: 18em; width: auto;" 
-        alt="cover">
+        <img src="{{ book.cover_image.url }}" class="card-img-top p-1" style="height: 18em; width: auto;"
+            alt="{{ book.title|truncate_chars:20}}">
         <div class="card-body p-2">
-            <h6 class="card-title h6 text-truncate">The name of the wind</h6>
+            <h6 class="card-title h6 text-truncate">{{ book.title|truncate_chars:24 }}</h6>
             <div class="btn-group btn-group-sm w-100" role="group" aria-label="Basic checkbox toggle button group">
-                <a class="btn btn-outline-secondary w-100" href="/home/details/" id="button-share">Details</a>
-                <input type="checkbox" class="btn-check" id="save{{ i }}" autocomplete="off">
-                <label class="btn btn-outline-secondary w-100" for="save{{ i }}">Save</label>
+                <a class="btn btn-outline-secondary w-100" href="/home/details/{{ book.id }}" id="button-share">Details</a>
+
+
+                {% csrf_token %}
+                <input type="checkbox" class="btn-check save-book" id="horizontal-save{{ book.id }}" autocomplete="off" 
+                {% if book.is_saved %} checked {% endif %}>
+                <label class="btn btn-outline-secondary w-100" for="horizontal-save{{ book.id }}">Save</label>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
+
 <!-- horizontal collection component end -->

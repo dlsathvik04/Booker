@@ -1,0 +1,96 @@
+{% load static %}
+
+<div class="mb-5">
+    <h3>Reviews</h3>
+    <div class="list-group">
+        <div class="list-group">
+            {% for rating in user_reactions %}
+            <div class="list-group-item d-flex justify-content-between align-items-start">
+                <div class="ms-2 me-auto">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="fw-bold">{{ rating.rating.user.username }}</div>
+                        <span class="badge bg-primary ms-2">Overall Rating: {{ rating.rating.rating_overall|floatformat:1 }}/5</span>
+                    </div>
+                    <p class="mt-2">{{ rating.rating.review }}</p>
+                    <div class="text-muted small">
+                        <span>Language: {{ rating.rating.rating_language|floatformat:1 }}/5</span> |
+                        <span>Children Friendly: {{ rating.rating.rating_children_friendly|floatformat:1 }}/5</span> |
+                        <span>Clarity: {{ rating.rating.rating_clarity|floatformat:1 }}/5</span>
+                    </div>
+                </div>
+                <div>
+                    <div class="btn-group" role="group">
+                        <button type="button" 
+                                class="btn btn-reaction btn-outline-success {% if rating.reaction and rating.reaction == 'upvote' %}active{% endif %}"
+                                data-rating-id="{{ rating.rating.id }}"
+                                data-reaction="upvote">
+                            Upvote
+                            <span class="badge bg-success upvote-count">
+                                {{ rating.upvote_count }}
+                            </span>
+                        </button>
+                        <button type="button" 
+                                class="btn btn-reaction btn-outline-danger {% if rating.reaction and rating.reaction  == 'downvote' %}active{% endif %}"
+                                data-rating-id="{{ rating.rating.id }}"
+                                data-reaction="downvote">
+                            Downvote
+                            <span class="badge bg-danger downvote-count">
+                                {{ rating.downvote_count }}
+                            </span>
+                        </button> 
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    document.querySelectorAll('.btn-reaction').forEach(button => {
+        button.addEventListener('click', function() {
+            console.log(this.dataset)
+            const ratingId = this.dataset.ratingId;
+            const reactionType = this.dataset.reaction;
+            
+            fetch("{% url 'toggle_review_reaction' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': csrftoken
+                },
+                body: `rating_id=${ratingId}&reaction=${reactionType}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Update upvote/downvote buttons
+                    const container = this.closest('.list-group-item');
+                    
+                    const upvoteBtn = container.querySelector('[data-reaction="upvote"]');
+                    const downvoteBtn = container.querySelector('[data-reaction="downvote"]');
+                    
+                    upvoteBtn.classList.remove('active');
+                    downvoteBtn.classList.remove('active');
+                    
+                    upvoteBtn.querySelector('.upvote-count').textContent = data.upvotes;
+                    downvoteBtn.querySelector('.downvote-count').textContent = data.downvotes;
+                    console.log(data)
+                    // Toggle active state
+                    if (data.reaction === 'upvote') {
+                        upvoteBtn.classList.add('active');
+                    } else if (data.reaction == 'downvote'){
+                        downvoteBtn.classList.add('active');
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    });
+});
+</script>

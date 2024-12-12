@@ -1,0 +1,51 @@
+<!-- ratings form start -->
+<div class="col-md-7 p-4">
+    <h3>{% if review %}Update{% else %}Submit{% endif %} Your Rating and Review</h3>
+    <form method="POST" action="{% url 'details' book.id %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="rating-overall" class="form-label">
+                Rating: <span id="ratingOverallDisplay">{{ review.rating_overall|default:0 }}</span>
+            </label>
+            <input type="range" id="rating-overall" name="rating_overall" class="form-range" min="0" max="5" step="0.1"
+                value="{{ review.rating_overall|default:0 }}"
+                oninput="document.getElementById('ratingOverallDisplay').innerText = this.value;">
+        </div>
+
+        <div class="mb-3">
+            <label for="rating-language" class="form-label">
+                Language Rating: <span id="ratingLanguageDisplay">{{ review.rating_language|default:0 }}</span>
+            </label>
+            <input type="range" id="rating-language" name="rating_language" class="form-range" min="0" max="5"
+                step="0.1" value="{{ review.rating_language|default:0 }}"
+                oninput="document.getElementById('ratingLanguageDisplay').innerText = this.value;">
+        </div>
+
+        <div class="mb-3">
+            <label for="rating-children-friendly" class="form-label">
+                Children Friendly Rating: <span id="ratingChildrenFriendlyDisplay">{{ review.rating_children_friendly|default:0 }}</span>
+            </label>
+            <input type="range" id="rating-children-friendly" name="rating_children_friendly" class="form-range" min="0"
+                max="5" step="0.1" value="{{ review.rating_children_friendly|default:0 }}"
+                oninput="document.getElementById('ratingChildrenFriendlyDisplay').innerText = this.value;">
+        </div>
+
+        <div class="mb-3">
+            <label for="rating-clarity" class="form-label">
+                Clarity Rating: <span id="ratingClarityDisplay">{{ review.rating_clarity|default:0 }}</span>
+            </label>
+            <input type="range" id="rating-clarity" name="rating_clarity" class="form-range" min="0" max="5" step="0.1"
+                value="{{ review.rating_clarity|default:0 }}"
+                oninput="document.getElementById('ratingClarityDisplay').innerText = this.value;">
+        </div>
+
+        <div class="mb-3">
+            <label for="review" class="form-label">Review</label>
+            <textarea id="review" name="review" class="form-control" rows="2" placeholder="Write your review here"
+                required>{{ review.review|default:'' }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">{% if review %}Update{% else %}Submit{% endif %}</button>
+    </form>
+</div>
+
+<!-- ratings form end -->
