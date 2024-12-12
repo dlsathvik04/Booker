@@ -5,39 +5,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booker-Home</title>
+    <title>Explore</title>
 
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
-    <style>
-        .rating-widget {
-            width: 8em;
-            height: 8em;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2rem;
-            color: #343a40;
-            margin: 0 auto;
-        }
-
-        .rating-widget span {
-            font-size: 1.5rem;
-            color: #6c757d;
-        }
-
-        @media (max-width: 576px) {
-            .rating-widget {
-                width: 10em;
-                height: 10em;
-                font-size: 1.5rem;
-            }
-
-            .rating-widget span {
-                font-size: 1.2rem;
-            }
-        }
-    </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('input[type="checkbox"].save-book').forEach(function (checkbox) {
@@ -80,28 +50,56 @@
 </head>
 
 <body>
-    {% include "widgets/navigation.html" with active="" only %}
-
-    <div class="container my-5">
-        {% include "widgets/book_info.html" with book=book %}
-
-
-        <div class="row my-4 rounded">
-            {% include "widgets/ratings.html" with book=book %}
-
-            {% include "widgets/ratings_form.html" with review=user_review %}
-        </div>
-
-
-        {% include "widgets/reviews.html" with ratings=ratings user_reactions=user_reactions %}
-
-        <div class="mb-5">
-            <h3>Similar Books</h3>
-            {% include "widgets/horizontal_collection.html" with books=similar_books %}
-        </div>
+    {% include "widgets/navigation.html" with active="Explore" only %}
+    <div class="container p-4">
+       <h3>
+           {% if search_query %}
+               Search Results for "{{ search_query }}"
+           {% else %}
+               All Books
+           {% endif %}
+       </h3>
+       
+       {% if books %}
+           {% include "widgets/vertical_collection.html" with books=books.object_list %}
+           
+           {% if is_paginated %}
+           <nav aria-label="Book pagination" class="mt-4">
+               <ul class="pagination justify-content-center">
+                   {% if books.has_previous %}
+                       <li class="page-item">
+                           <a class="page-link" href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}">First</a>
+                       </li>
+                       <li class="page-item">
+                           <a class="page-link" href="?page={{ books.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Previous</a>
+                       </li>
+                   {% endif %}
+   
+                   <li class="page-item disabled">
+                       <span class="page-link">
+                           Page {{ books.number }} of {{ books.paginator.num_pages }}
+                       </span>
+                   </li>
+   
+                   {% if books.has_next %}
+                       <li class="page-item">
+                           <a class="page-link" href="?page={{ books.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}">Next</a>
+                       </li>
+                       <li class="page-item">
+                           <a class="page-link" href="?page={{ books.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}">Last</a>
+                       </li>
+                   {% endif %}
+               </ul>
+           </nav>
+           {% endif %}
+       {% else %}
+           {% if search_query %}
+               <p class="alert alert-info">No books found matching your search for "{{ search_query }}".</p>
+           {% else %}
+               <p class="alert alert-info">No books available.</p>
+           {% endif %}
+       {% endif %}
     </div>
-
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-</body>
-
+   </body>
 </html>

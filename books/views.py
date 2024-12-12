@@ -6,7 +6,10 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from books.models import Book, Rating, ReviewReaction, Wishlist
-from django.db.models import Exists, OuterRef, Count
+from django.db.models import Exists, OuterRef, Count, F, Q
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from books.services.recommendation import get_recommended_books, get_similar_books
 
 @login_required
 def home(request):
@@ -83,7 +86,15 @@ def list(req: HttpRequest):
 
 @login_required
 def recommendations(req: HttpRequest):
-    return render(req, "books/recommendations.html")
+    # Fetch the top 5 books rated by the current user based on rating_overall
+    
+    # Get recommendations based on the top-rated books
+
+    recommended_books= get_recommended_books(req.user)
+
+    # Pass the recommended books to the template
+    context = {'recommendations': recommended_books}
+    return render(req, "books/recommendations.html", context)
 
 
 @login_required
@@ -125,6 +136,8 @@ def details(request, book_id):
             messages.success(request, "Your review has been submitted.")
 
         return redirect("details", book_id=book_id)
+    
+    similar_books = get_similar_books(book, request.user)
 
     ratings = book.ratings.all()
     user_reactions = [
@@ -145,6 +158,7 @@ def details(request, book_id):
         "ratings": ratings,
         "user_review": user_review,
         "user_reactions": user_reactions,
+        "similar_books" : similar_books,
     }
 
     return render(request, "books/book_details.html", context)
@@ -190,3 +204,39 @@ def toggle_wishlist(request):
     elif action == 'remove':
         Wishlist.objects.filter(user=request.user, book=book).delete()
     return JsonResponse({'success': True})
+
+
+
+@login_required
+def explore(request):
+    query = request.GET.get('search', '').strip()
+    
+    if query:
+        books_list = Book.objects.filter(
+            Q(title__icontains=query) | Q(author__icontains=query)
+        )
+    else:
+        books_list = Book.objects.all()
+
+    books_list = books_list.annotate(
+        is_saved=Exists(
+            Wishlist.objects.filter(user=request.user, book_id=OuterRef('pk'))
+        )
+    )
+    
+    paginator = Paginator(books_list, 20)
+    
+    page = request.GET.get('page', 1)
+    
+    try:
+        books = paginator.page(page)
+    except PageNotAnInteger:
+        books = paginator.page(1)
+    except EmptyPage:
+        books = paginator.page(paginator.num_pages)
+    
+    return render(request, "books/explore.html", {
+        'books': books,  
+        'search_query': query,
+        'is_paginated': books.has_other_pages(),
+    })

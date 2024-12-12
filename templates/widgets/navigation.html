@@ -24,14 +24,20 @@
                 <a class="nav-link {% if active == 'New' %}active{% endif %}" href="/home/new/">New</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {% if active == 'My List' %}active{% endif %}" href="/home/list/">My List</a>
+                <a class="nav-link {% if active == 'My List' %}active{% endif %}" href="/home/list/">WishList</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {% if active == 'Recommendations' %}active{% endif %}" href="/home/recommendations/">Recommendations</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {% if active == 'Explore' %}active{% endif %}" href="/home/explore/">Explore</a>
+            </li>
         </ul>
-        <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <form class="d-flex" role="search" action="{% url 'explore' %}" method="GET">
+            <input class="form-control me-2" type="search" name="search" 
+                   placeholder="Search by title or author" 
+                   aria-label="Search"
+                   value="{{ search_query }}">
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
         
