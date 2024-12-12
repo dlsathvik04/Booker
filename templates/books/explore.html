@@ -14,12 +14,9 @@
                 checkbox.addEventListener('change', function () {
                     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
                     let bookId = this.id.replace('horizontal-save', ''); 
-                    bookId = bookId.replace('vertical-save', ''); // Get the book id from the checkbox ID
-                    const isChecked = this.checked;  // Whether the checkbox is checked or not
-    
-                    console.log(bookId, isChecked);
-    
-                    // Send an AJAX request to add/remove the book from the wishlist
+                    bookId = bookId.replace('vertical-save', '');
+                    const isChecked = this.checked;
+                    console.log(bookId, isChecked);    
                     fetch("{% url 'toggle_wishlist' %}", {
                         method: 'POST',
                         headers: {
@@ -37,7 +34,6 @@
                         .then(data => {
                             console.log(data);
                             location.reload();
-                            // Optionally, handle the response, like updating the UI with a success message
                         })
                         .catch(error => {
                             console.error('Error:', error);

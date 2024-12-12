@@ -12,8 +12,8 @@ def get_recommended_books(user, max_recommendations=20):
 
     top_rated_books = (
         Book.objects.filter(ratings__user=user)
-        .annotate(user_rating=F('ratings__rating_overall'))  # Annotate the rating_overall for each book
-        .order_by('-user_rating')[:5]  # Order by rating_overall and limit to 5
+        .annotate(user_rating=F('ratings__rating_overall'))
+        .order_by('-user_rating')[:5]
     )
 
     

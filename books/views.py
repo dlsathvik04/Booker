@@ -86,13 +86,7 @@ def list(req: HttpRequest):
 
 @login_required
 def recommendations(req: HttpRequest):
-    # Fetch the top 5 books rated by the current user based on rating_overall
-    
-    # Get recommendations based on the top-rated books
-
     recommended_books= get_recommended_books(req.user)
-
-    # Pass the recommended books to the template
     context = {'recommendations': recommended_books}
     return render(req, "books/recommendations.html", context)
 
@@ -100,6 +94,12 @@ def recommendations(req: HttpRequest):
 @login_required
 def details(request, book_id):
     book = get_object_or_404(Book, id=book_id)
+    is_saved = Wishlist.objects.filter(user=request.user, book_id=book.pk).exists()
+
+   
+    
+    
+
     if request.method == "POST":
         rating_overall = request.POST.get("rating_overall")
         rating_language = request.POST.get("rating_language")
@@ -159,6 +159,7 @@ def details(request, book_id):
         "user_review": user_review,
         "user_reactions": user_reactions,
         "similar_books" : similar_books,
+        "is_saved" : is_saved
     }
 
     return render(request, "books/book_details.html", context)

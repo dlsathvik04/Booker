@@ -45,6 +45,7 @@
                     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
                     let bookId = this.id.replace('horizontal-save', ''); 
                     bookId = bookId.replace('vertical-save', ''); // Get the book id from the checkbox ID
+                    bookId = bookId.replace('page-save', ''); // Get the book id from the checkbox ID
                     const isChecked = this.checked;  // Whether the checkbox is checked or not
     
                     console.log(bookId, isChecked);
@@ -83,7 +84,7 @@
     {% include "widgets/navigation.html" with active="" only %}
 
     <div class="container my-5">
-        {% include "widgets/book_info.html" with book=book %}
+        {% include "widgets/book_info.html" with book=book is_saved=is_saved %}
 
 
         <div class="row my-4 rounded">
