@@ -86,16 +86,17 @@
     <div class="container my-5">
         {% include "widgets/book_info.html" with book=book is_saved=is_saved %}
 
+        <hr>
 
         <div class="row my-4 rounded">
             {% include "widgets/ratings.html" with book=book %}
 
             {% include "widgets/ratings_form.html" with review=user_review %}
         </div>
-
-
+        <hr>
+        <br>
         {% include "widgets/reviews.html" with ratings=ratings user_reactions=user_reactions %}
-
+        <hr>
         <div class="mb-5">
             <h3>Similar Books</h3>
             {% include "widgets/horizontal_collection.html" with books=similar_books %}

@@ -30,5 +30,5 @@ urlpatterns = [
     path("recommendations/", views.recommendations),
     path("details/<int:book_id>/", views.details, name="details"),
     path('toggle-review-reaction/', views.toggle_review_reaction, name='toggle_review_reaction'),
-    path('wishlist/toggle/', views.toggle_wishlist, name='toggle_wishlist')
+    path('wishlist/toggle/', views.toggle_wishlist, name='toggle_wishlist'),
 ]

@@ -114,3 +114,6 @@ class Wishlist(models.Model):
         unique_together = ('user', 'book')
     def __str__(self):
         return f"{self.user.username}'s wishlist - {self.book.title}"
+    
+
+    

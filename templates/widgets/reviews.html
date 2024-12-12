@@ -5,7 +5,7 @@
     <div class="list-group">
         <div class="list-group">
             {% for rating in user_reactions %}
-            <div class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="list-group-item d-flex justify-content-between align-items-start flex-wrap" >
                 <div class="ms-2 me-auto">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="fw-bold">{{ rating.rating.user.username }}</div>

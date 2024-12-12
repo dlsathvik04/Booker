@@ -10,7 +10,6 @@
         <p class="mt-3">
             {{ book.description }}
         </p>
-        <a class="btn btn-primary" href="#" role="button">View Sources</a>
         {% csrf_token %}
         <input type="checkbox" class="btn-check save-book" id="page-save{{ book.id }}" autocomplete="off" 
         {% if is_saved %} checked {% endif %}>
